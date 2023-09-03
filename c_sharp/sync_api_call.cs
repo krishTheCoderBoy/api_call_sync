@@ -43,3 +43,42 @@ public class ApiCaller
         }
     }
 }
+
+// another method
+using System;
+using System.Net.Http;
+
+public class SyncApiCaller
+{
+    public string MakeApiCall(string apiUrl)
+    {
+        using (HttpClient httpClient = new HttpClient())
+        {
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(apiUrl).Result;
+
+                // Check if the response is successful
+                response.EnsureSuccessStatusCode();
+
+                // Read the response content as a string
+                string responseBody = response.Content.ReadAsStringAsync().Result;
+
+                return responseBody;
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handle HTTP request-specific exceptions
+                Console.WriteLine($"HTTP Request Error: {ex.Message}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                Console.WriteLine($"Error: {ex.Message}");
+                return null;
+            }
+        }
+    }
+}
+
